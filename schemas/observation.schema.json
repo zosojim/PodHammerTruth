@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zosojim.github.io/PodHammerTruth/schemas/observation.schema.json",
+  "title": "Pod Hammer launch observation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "observed_day",
+    "provenance",
+    "provider",
+    "data_center",
+    "hardware",
+    "storage",
+    "cache_state",
+    "timings_ms",
+    "outcome"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "run_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "observed_day": {
+      "type": "string",
+      "format": "date"
+    },
+    "provenance": {
+      "enum": ["imported", "client-measured", "attested", "maintainer-verified"]
+    },
+    "provider": {
+      "enum": ["runpod", "vast"]
+    },
+    "data_center": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "pattern": "^[A-Za-z0-9._ -]+$"
+    },
+    "recipe_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "pattern": "^[a-z0-9][a-z0-9._-]+$"
+    },
+    "recipe_revision": {
+      "type": "string",
+      "minLength": 7,
+      "maxLength": 64,
+      "pattern": "^[A-Fa-f0-9]+$"
+    },
+    "app_version": {
+      "type": "string",
+      "maxLength": 40,
+      "pattern": "^[A-Za-z0-9.+_-]+$"
+    },
+    "hardware": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gpu_sku", "gpu_count", "gpu_memory_gb"],
+      "properties": {
+        "gpu_sku": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "gpu_count": { "type": "integer", "minimum": 1, "maximum": 16 },
+        "gpu_memory_gb": { "type": "number", "exclusiveMinimum": 0, "maximum": 2048 }
+      }
+    },
+    "storage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "size_gb"],
+      "properties": {
+        "kind": { "enum": ["ephemeral", "network", "persistent-local", "unknown"] },
+        "size_gb": { "type": "integer", "minimum": 1, "maximum": 10000 }
+      }
+    },
+    "cache_state": {
+      "enum": ["cold", "warm-dependencies", "warm-model", "unknown"]
+    },
+    "timings_ms": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "request_to_provider_running": { "$ref": "#/$defs/duration" },
+        "request_to_ssh_ready": { "$ref": "#/$defs/duration" },
+        "ssh_ready_to_stack_ready": { "$ref": "#/$defs/duration" },
+        "request_to_stack_ready": { "$ref": "#/$defs/duration" },
+        "first_completion": { "$ref": "#/$defs/duration" },
+        "segments": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "provider_scheduling": { "$ref": "#/$defs/duration" },
+            "provider_boot": { "$ref": "#/$defs/duration" },
+            "ssh_wait": { "$ref": "#/$defs/duration" },
+            "bootstrap_dependencies": { "$ref": "#/$defs/duration" },
+            "model_download": { "$ref": "#/$defs/duration" },
+            "model_load": { "$ref": "#/$defs/duration" },
+            "readiness_probe": { "$ref": "#/$defs/duration" },
+            "first_completion": { "$ref": "#/$defs/duration" }
+          }
+        }
+      }
+    },
+    "outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": {
+          "enum": [
+            "ready",
+            "capacity-unavailable",
+            "provider-failed",
+            "ssh-failed",
+            "bootstrap-failed",
+            "readiness-failed",
+            "cancelled",
+            "unknown"
+          ]
+        },
+        "error_class": {
+          "type": "string",
+          "maxLength": 80,
+          "pattern": "^[A-Za-z0-9._ -]+$"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "duration": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 604800000
+    }
+  }
+}

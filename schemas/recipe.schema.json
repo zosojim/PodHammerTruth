@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zosojim.github.io/PodHammerTruth/schemas/recipe.schema.json",
+  "title": "Pod Hammer workload recipe",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "name",
+    "status",
+    "workload",
+    "model",
+    "runtime",
+    "bootstrap",
+    "requirements",
+    "providers",
+    "ports",
+    "readiness",
+    "evidence"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "pattern": "^[a-z0-9][a-z0-9._-]+$"
+    },
+    "name": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "status": { "enum": ["experimental", "community-tested", "verified", "deprecated"] },
+    "verified_day": { "type": "string", "format": "date" },
+    "workload": { "enum": ["roleplay-chat", "general-inference", "comfyui"] },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "revision", "format"],
+      "properties": {
+        "source": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "revision": { "type": "string", "minLength": 7, "maxLength": 64 },
+        "format": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "expected_bytes": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "revision"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "revision": { "type": "string", "minLength": 1, "maxLength": 80 }
+      }
+    },
+    "bootstrap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "revision", "sha256", "arguments"],
+      "properties": {
+        "source": { "type": "string", "format": "uri", "maxLength": 500 },
+        "revision": { "type": "string", "minLength": 7, "maxLength": 64 },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "arguments": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[A-Za-z0-9._-]+$", "maxLength": 40 },
+          "maxItems": 20
+        }
+      }
+    },
+    "requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum_gpu_memory_gb", "gpu_count", "minimum_workspace_gb"],
+      "properties": {
+        "minimum_gpu_memory_gb": { "type": "number", "exclusiveMinimum": 0 },
+        "gpu_count": { "type": "integer", "minimum": 1, "maximum": 16 },
+        "minimum_cuda_major": { "type": "integer", "minimum": 1, "maximum": 99 },
+        "gpu_architecture": { "type": "string", "maxLength": 80 },
+        "minimum_workspace_gb": { "type": "integer", "minimum": 1, "maximum": 10000 },
+        "base_image": { "type": "string", "minLength": 1, "maxLength": 240 }
+      }
+    },
+    "providers": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "runpod": { "$ref": "#/$defs/provider" },
+        "vast": { "$ref": "#/$defs/provider" }
+      }
+    },
+    "ports": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "port", "protocol"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+          "port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+          "protocol": { "enum": ["http", "tcp"] },
+          "optional": { "type": "boolean" }
+        }
+      }
+    },
+    "readiness": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "target"],
+        "properties": {
+          "kind": { "enum": ["tcp", "http", "openai-models", "openai-completion"] },
+          "target": { "type": "string", "minLength": 1, "maxLength": 240 }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["day", "provenance", "summary"],
+        "properties": {
+          "day": { "type": "string", "format": "date" },
+          "provenance": { "enum": ["imported", "client-measured", "attested", "maintainer-verified"] },
+          "summary": { "type": "string", "minLength": 1, "maxLength": 600 },
+          "source": { "type": "string", "format": "uri", "maxLength": 500 }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gpu_skus"],
+      "properties": {
+        "gpu_skus": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1, "maxLength": 120 }
+        }
+      }
+    }
+  }
+}

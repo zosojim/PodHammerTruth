@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Reproducible GPU workload recipes and opt-in Pod Hammer launch timings.">
+  <title>Pod Hammer Truth</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <p class="eyebrow">PUBLIC EVIDENCE LEDGER</p>
+      <h1>Pod Hammer Truth</h1>
+      <p class="lede">Known construction recipes and privacy-preserving launch measurements—published in the open and reproducible from source.</p>
+      <div class="actions">
+        <a class="button primary" href="#timings">Explore timings</a>
+        <a class="button" href="https://github.com/zosojim/PodHammerTruth">Inspect the repository</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="principles" aria-label="Dataset principles">
+      <article><strong>Opt in</strong><span>No background collection. Every contribution is intentional.</span></article>
+      <article><strong>Secret free</strong><span>No credentials, addresses, commands, prompts, or output.</span></article>
+      <article><strong>Reproducible</strong><span>Aggregates are rebuilt from public, schema-valid observations.</span></article>
+    </section>
+
+    <section id="timings" class="section">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">REGIONAL RESULTS</p>
+          <h2>Launch timings</h2>
+        </div>
+        <p id="dataset-meta" class="muted">Loading dataset…</p>
+      </div>
+      <div id="timing-empty" class="empty" hidden>
+        <h3>No public timing observations yet</h3>
+        <p>The ledger is ready. The first explicitly contributed Hammer export will establish the baseline without manufacturing historical measurements.</p>
+      </div>
+      <div id="timing-grid" class="card-grid"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">VERSIONED CONTRACTS</p>
+          <h2>Profile recipes</h2>
+        </div>
+        <p class="muted">Pinned model, runtime, bootstrap, hardware, storage, ports, and readiness facts.</p>
+      </div>
+      <div id="recipe-grid" class="card-grid"></div>
+    </section>
+
+    <section class="section methodology">
+      <p class="eyebrow">HOW TO READ THIS</p>
+      <h2>Median first, tails visible</h2>
+      <p>Median represents the ordinary observed result. p90 shows the slower tail. Capacity misses and construction failures remain visible in the success rate instead of being silently discarded. Cold, warm-dependency, and warm-model runs are never mixed.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <span>Community measurements, not a provider capacity guarantee.</span>
+      <a href="https://github.com/zosojim/PodHammerTruth/blob/main/PRIVACY.md">Privacy</a>
+      <a href="https://github.com/zosojim/PodHammerTruth/blob/main/CONTRIBUTING.md">Contribute</a>
+    </div>
+  </footer>
+  <script src="app.js" defer></script>
+</body>
+</html>

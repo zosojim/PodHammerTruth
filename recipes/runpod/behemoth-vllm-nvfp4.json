@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "id": "podhammer.deployment.behemoth-v2-nvfp4",
+  "name": "Behemoth-X 123B v2 NVFP4 on vLLM",
+  "status": "verified",
+  "verified_day": "2026-07-29",
+  "workload": "roleplay-chat",
+  "model": {
+    "source": "mratsim/Behemoth-X-123B-v2-NVFP4",
+    "revision": "34437e8f5be2e23385eee58230999638c8d83791",
+    "format": "NVFP4",
+    "expected_bytes": 70126078525
+  },
+  "runtime": {
+    "name": "vLLM",
+    "revision": "0.24.0"
+  },
+  "bootstrap": {
+    "source": "https://github.com/zosojim/RunpodHammer-Xcode/blob/77d6445fd318cc5b0a551a372380db165b2176bd/scripts/runpod/start-stack.sh",
+    "revision": "77d6445fd318cc5b0a551a372380db165b2176bd",
+    "sha256": "4223dd4c48b5701857635fd40d4958881805f1dbc04e794ec6948ff4f35c89ad",
+    "arguments": ["behemoth", "silly"]
+  },
+  "requirements": {
+    "minimum_gpu_memory_gb": 96,
+    "gpu_count": 1,
+    "minimum_cuda_major": 13,
+    "gpu_architecture": "Blackwell",
+    "minimum_workspace_gb": 300,
+    "base_image": "runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404"
+  },
+  "providers": {
+    "runpod": {
+      "gpu_skus": [
+        "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+        "NVIDIA RTX PRO 6000 Blackwell Workstation Edition"
+      ]
+    },
+    "vast": {
+      "gpu_skus": ["RTX PRO 6000 S", "RTX PRO 6000 WS"]
+    }
+  },
+  "ports": [
+    { "name": "Inference", "port": 5000, "protocol": "http" },
+    { "name": "SillyTavern", "port": 8000, "protocol": "http", "optional": true },
+    { "name": "JupyterLab", "port": 8888, "protocol": "http", "optional": true }
+  ],
+  "readiness": [
+    { "kind": "tcp", "target": "5000" },
+    { "kind": "openai-models", "target": "http://127.0.0.1:5000/v1/models" },
+    { "kind": "openai-completion", "target": "http://127.0.0.1:5000/v1/chat/completions" }
+  ],
+  "evidence": [
+    {
+      "day": "2026-07-29",
+      "provenance": "maintainer-verified",
+      "summary": "Fresh disposable RunPod and Vast builds downloaded 15 NVFP4 shards, initialized a FlashInfer-backed vLLM runtime, enforced bearer authentication, and completed a real chat request."
+    }
+  ]
+}

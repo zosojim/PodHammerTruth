@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "id": "podhammer.deployment.midnight-miqu-103b-exl2",
+  "name": "Midnight Miqu 103B 5.0 bpw EXL2 on TabbyAPI",
+  "status": "verified",
+  "verified_day": "2026-07-29",
+  "workload": "roleplay-chat",
+  "model": {
+    "source": "FluffyKaeloky/Midnight-Miqu-103B-v1.5-exl2-5.0bpw-rpcal",
+    "revision": "47cc150b991acacfc5671ab2392056ee16fd996c",
+    "format": "EXL2-5.0bpw",
+    "expected_bytes": 64906893751
+  },
+  "runtime": {
+    "name": "TabbyAPI",
+    "revision": "79126f904c2e00aece026b36bb70bbb87e4892b2"
+  },
+  "bootstrap": {
+    "source": "https://github.com/zosojim/RunpodHammer-Xcode/blob/77d6445fd318cc5b0a551a372380db165b2176bd/scripts/runpod/start-stack.sh",
+    "revision": "77d6445fd318cc5b0a551a372380db165b2176bd",
+    "sha256": "4223dd4c48b5701857635fd40d4958881805f1dbc04e794ec6948ff4f35c89ad",
+    "arguments": ["miqu", "silly"]
+  },
+  "requirements": {
+    "minimum_gpu_memory_gb": 96,
+    "gpu_count": 1,
+    "minimum_cuda_major": 12,
+    "gpu_architecture": "Blackwell",
+    "minimum_workspace_gb": 300,
+    "base_image": "runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404"
+  },
+  "providers": {
+    "runpod": {
+      "gpu_skus": [
+        "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+        "NVIDIA RTX PRO 6000 Blackwell Workstation Edition"
+      ]
+    },
+    "vast": {
+      "gpu_skus": ["RTX PRO 6000 S", "RTX PRO 6000 WS"]
+    }
+  },
+  "ports": [
+    { "name": "Inference", "port": 5000, "protocol": "http" },
+    { "name": "SillyTavern", "port": 8000, "protocol": "http", "optional": true },
+    { "name": "JupyterLab", "port": 8888, "protocol": "http", "optional": true }
+  ],
+  "readiness": [
+    { "kind": "tcp", "target": "5000" },
+    { "kind": "openai-models", "target": "http://127.0.0.1:5000/v1/models" },
+    { "kind": "openai-completion", "target": "http://127.0.0.1:5000/v1/chat/completions" }
+  ],
+  "evidence": [
+    {
+      "day": "2026-07-29",
+      "provenance": "maintainer-verified",
+      "summary": "Fresh disposable RunPod and Vast construction completed successfully. A warm-dependency run downloaded and loaded the model in 117 seconds, used 75,547 MiB VRAM, enforced bearer authentication, and completed a real chat request."
+    },
+    {
+      "day": "2026-07-29",
+      "provenance": "maintainer-verified",
+      "summary": "TabbyAPI revision 79126f904c2e00aece026b36bb70bbb87e4892b2 is pinned as the final revision before the ExLlamaV2 backend removal.",
+      "source": "https://github.com/theroyallab/tabbyAPI/commit/79126f904c2e00aece026b36bb70bbb87e4892b2"
+    }
+  ]
+}

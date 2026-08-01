@@ -1,0 +1,27 @@
+name: Validate truth data
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python3 scripts/validate.py
+      - run: python3 -m unittest discover -s scripts/tests
+      - run: python3 scripts/aggregate.py --output aggregates/summary.json
+      - run: git diff --exit-code -- aggregates/summary.json
+      - name: Type-check intake service
+        working-directory: intake
+        run: npm ci && npm run check
