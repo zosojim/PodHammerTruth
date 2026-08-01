@@ -28,6 +28,9 @@ python3 scripts/build_site.py --output _site
 python3 -m unittest discover -s scripts/tests
 ```
 
+Hammer export bundles can be split into reviewable observation files with
+`python3 scripts/import_bundle.py path/to/bundle.json`.
+
 ## Contributing
 
 Recipes and manual observation exports are accepted through pull requests.

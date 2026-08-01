@@ -59,7 +59,7 @@
     "hardware": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["gpu_sku", "gpu_count", "gpu_memory_gb"],
+      "required": ["gpu_sku"],
       "properties": {
         "gpu_sku": { "type": "string", "minLength": 1, "maxLength": 120 },
         "gpu_count": { "type": "integer", "minimum": 1, "maximum": 16 },
@@ -69,7 +69,7 @@
     "storage": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["kind", "size_gb"],
+      "required": ["kind"],
       "properties": {
         "kind": { "enum": ["ephemeral", "network", "persistent-local", "unknown"] },
         "size_gb": { "type": "integer", "minimum": 1, "maximum": 10000 }

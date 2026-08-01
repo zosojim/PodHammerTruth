@@ -4,9 +4,11 @@
 
 1. Export the truth bundle from Pod Hammer's Launch Stats screen.
 2. Review the JSON. It must contain no secret or connection information.
-3. Add it under `observations/YYYY/MM/` using its `run_id` as the filename.
+3. Run `python3 scripts/import_bundle.py path/to/bundle.json` to split it into
+   observation files under the correct year and month.
 4. Run `python3 scripts/validate.py`.
-5. Open a pull request and affirm that publication is intentional.
+5. Run `python3 scripts/aggregate.py --output aggregates/summary.json`.
+6. Open a pull request and affirm that publication is intentional.
 
 One file represents one launch attempt. Do not combine or edit durations to
 make a run look better. Failed and capacity-constrained attempts are valuable.

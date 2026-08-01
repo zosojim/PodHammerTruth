@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zosojim.github.io/PodHammerTruth/schemas/export-bundle.schema.json",
+  "title": "Pod Hammer observation export bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_day", "observations"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "generated_day": { "type": "string", "format": "date" },
+    "observations": {
+      "type": "array",
+      "items": { "$ref": "observation.schema.json" },
+      "maxItems": 500
+    }
+  }
+}
