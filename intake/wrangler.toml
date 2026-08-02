@@ -1,0 +1,10 @@
+name = "podhammer-truth-intake"
+main = "src/index.ts"
+compatibility_date = "2026-08-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "podhammer-truth"
+database_id = "022b1436-359f-4d63-9510-cb804197d223"
+
+# Values are configured with `wrangler secret put`; never add them here.

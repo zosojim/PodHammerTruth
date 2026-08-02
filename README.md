@@ -34,9 +34,13 @@ Hammer export bundles can be split into reviewable observation files with
 ## Contributing
 
 Recipes and manual observation exports are accepted through pull requests.
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting data. The future
-automatic intake service lives in `intake/`; it is deliberately separate from
-the public repository so no writable GitHub credential is shipped in the app.
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting data. The opt-in
+automatic intake service is deployed at
+`https://podhammer-truth-intake.podhammer-truth-intake.workers.dev` and its
+source lives in `intake/`. It is deliberately separate from the public
+repository so no writable GitHub credential is shipped in the app. Accepted
+submissions remain private and pending until a maintainer validates and
+publishes them through the normal repository workflow.
 
 ## Evidence labels
 
